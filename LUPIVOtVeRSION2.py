@@ -1,7 +1,28 @@
 from pylab  import *
 import copy
+#########LU################################
 
+def zerlegung(A):
+    A = array(A)
+    dim = A.shape[0]
+    p = zeros(dim, int)
+   
+    for piv in range(0,dim):
+        h = piv;
+        if(A[piv, piv]==0):
+            h = find(A[piv:,piv]!=0)[0]+piv;
+            A[[piv,h],:] =A[[h,piv],:]
+            
+        p[piv]=h
+        for zeile in range(piv+1,dim):
+            div=float(A[zeile,piv])/A[piv, piv]
+            zh = multiply(div, A[piv,piv+1:])
+            A[zeile,piv+1:] = subtract(A[zeile,piv+1:],zh)
+            A[zeile,piv]=div
+    return [A,p]    
 
+#############################################
+ 
 def zerlegungPivot(A):
     A = array(A)
     dim = A.shape[0]
@@ -59,24 +80,22 @@ def vorwaerts(LU,x):
         y[i] = x[i]-h        
     return y     
         
- 
 
+
+#EINFACHES BEISPIEL
+"""
 print "LU Zerlegung mit Pivotisierung "          
 A = array([[0, 0, 0, 1], [2, 1, 2, 0], [4, 4, 0, 0], [2, 3, 1, 0]], dtype=float16)
 b1 = array([3,5,4,5])
 b2 = array([4,10,12,11])
-
-
+ 
 LUP = zerlegungPivot(A)
-
- 
- 
  
 x1 = permutation(LUP[1],b1)
 x1 = vorwaerts(LUP[0],x1)
 x1 = rueckwaerts(LUP[0],x1)
 
-"""
+ 
 x2 = permutation(LUP[1],b2)
 x2 = vorwaerts(LUP[0],x2)
 x2 = rueckwaerts(LUP[0],x2)
@@ -85,7 +104,7 @@ print x2
 
  
 
-#Matrix A
+#erstelle matrix A für die Aufgabe 4 
 def MatrixA(n, Beta):
     A = [n*[0] for i in range(n)]
     for j in xrange(0, n):
@@ -98,7 +117,7 @@ def MatrixA(n, Beta):
     A[0][n - 1] = Beta
     return A
 
-#Vektor B
+#erstelle vektor b für die Aufgabe 4 
 def VektorB(n, Beta):
     b = zeros(n, float)
 
@@ -111,7 +130,28 @@ def VektorB(n, Beta):
 
 
 
+
+
+
+#EINFACHES BEISPIEL
+"""
+print "LU Zerlegung mit Pivotisierung "          
+A = array([[0, 0, 0, 1], [2, 1, 2, 0], [4, 4, 0, 0], [2, 3, 1, 0]], dtype=float16)
+b1 = array([3,5,4,5])
+b2 = array([4,10,12,11])
  
+LUP = zerlegungPivot(A)
+ 
+x1 = permutation(LUP[1],b1)
+x1 = vorwaerts(LUP[0],x1)
+x1 = rueckwaerts(LUP[0],x1)
+
+ 
+x2 = permutation(LUP[1],b2)
+x2 = vorwaerts(LUP[0],x2)
+x2 = rueckwaerts(LUP[0],x2)
+print x2
+""" 
 
 ################
 print "Aufgabe 4 " 
@@ -119,13 +159,25 @@ Beta = 10
 n = [10, 15, 20]
 
 for val in n:
+    exacteLoesung =  [1 for i in range(val)]
     print " n = " , val 
     A = MatrixA(val, Beta)
     B = VektorB(val, Beta)
- 
-    LU = zerlegungPivot(A)
- 
+  
+    #LU Pivotisierung
+    LUP = zerlegungPivot(A)
+    yP = vorwaerts(LUP[0],permutation(LUP[1],B))
+    xP = rueckwaerts(LUP[0],yP)
+    # LU (ohne Pivotisierung)
+    LU  = zerlegungPivot(A)
     y = vorwaerts(LU[0],permutation(LU[1],B))
     x = rueckwaerts(LU[0],y)
-    print x
 
+    print "Die Lösung der LGS mit LU mit Pivotisierung"
+    print xP
+    print "Die Lösung der LGS mit LU ohne Pivotisierung"
+    print x
+    print "Exacte Lösung"
+    print exacteLoesung
+    print "--------------------------------------------"
+# Man kann behaupten, dass die Verfahren ......
