@@ -6,19 +6,19 @@ def zerlegung(A):
     A = array(A)
     dim = A.shape[0]
     p = zeros(dim, int)
-   
-    for piv in range(0,dim):
-        h = piv;
-        if(A[piv, piv]==0):
-            h = find(A[piv:,piv]!=0)[0]+piv;
-            A[[piv,h],:] =A[[h,piv],:]
+    
+    for i in range(0,dim):
+        h = i;
+        if(A[i, i]==0): # Falls Element auf Position [i,i] = 0 ist, dann tauschen wir die Zeilen
+            h = find(A[i:,i]!=0)[0]+piv;
+            A[[i,h],:] =A[[h,i],:] #Zeilen tauschen
             
-        p[piv]=h
-        for zeile in range(piv+1,dim):
-            div=float(A[zeile,piv])/A[piv, piv]
-            zh = multiply(div, A[piv,piv+1:])
-            A[zeile,piv+1:] = subtract(A[zeile,piv+1:],zh)
-            A[zeile,piv]=div
+        p[i]=h
+        for zeile in range(i+1,dim):
+            koeff=float(A[zeile,i])/A[i, i] # Finden L11
+            substZeile = multiply(koeff, A[i,i+1:]) # Koeff mal neue Zeile
+            A[zeile,i+1:] = subtract(A[zeile,i+1:],substZeile)# Sustrairen von der alte Zeile die neue zeile
+            A[zeile,i]=koeff # Speichern L11 in A matrix
     return [A,p]    
 
 #############################################
@@ -47,13 +47,13 @@ def zerlegungPivot(A):
         for zeile in range(i+1,dim): #erste  Zeil bleibt unveränderlich
             koeff = A[zeile][i]/float(A[i][i])
             
-            zh = multiply(koeff, A[i,i+1:])
-            A[zeile,i+1:] = subtract(A[zeile,i+1:],zh)
+            substZeile = multiply(koeff, A[i,i+1:])  # Koeff mal neue Zeile
+            A[zeile,i+1:] = subtract(A[zeile,i+1:],substZeile) # Sustrairen von der alte Zeile die neue zeile
             A[zeile,i]=float(koeff)
 
              
     return [A,p]    
-
+############################################
 def permutation(p,x):
     x = array(x)
     dim = p.shape[0]
@@ -99,13 +99,13 @@ x1 = rueckwaerts(LUP[0],x1)
 x2 = permutation(LUP[1],b2)
 x2 = vorwaerts(LUP[0],x2)
 x2 = rueckwaerts(LUP[0],x2)
-print x2
+print x2 # Die Lösungen stimmen überein
 """
 
  
 
 #erstelle matrix A für die Aufgabe 4 
-def MatrixA(n, Beta):
+def MatrixA(n, beta):
     A = [n*[0] for i in range(n)]
     for j in xrange(0, n):
         if j != n-1:
@@ -113,19 +113,19 @@ def MatrixA(n, Beta):
         else:
             A[j][j] = 0
             
-        A[j][j-1] = -Beta
-    A[0][n - 1] = Beta
+        A[j][j-1] = -beta
+    A[0][n - 1] = beta
     return A
 
 #erstelle vektor b für die Aufgabe 4 
-def VektorB(n, Beta):
+def VektorB(n, beta):
     b = zeros(n, float)
 
     for j in xrange(0, n):
-        b[j] = float(1 - Beta ) 
+        b[j] = float(1 - beta ) 
 
-    b[0] = 1 + Beta
-    b[n - 1] = -Beta
+    b[0] = 1 + beta
+    b[n - 1] = -beta
     return b
 
 
