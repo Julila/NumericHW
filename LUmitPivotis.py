@@ -82,7 +82,7 @@ def vorwaerts(LU,x):
         
 
 
-#EINFACHES BEISPIEL
+#EINFACHES BEISPIEL aus dem Skript
 """
 print "LU Zerlegung mit Pivotisierung "          
 A = array([[0, 0, 0, 1], [2, 1, 2, 0], [4, 4, 0, 0], [2, 3, 1, 0]], dtype=float16)
@@ -128,10 +128,7 @@ def VektorB(n, beta):
     b[n - 1] = -beta
     return b
 
-
-
-
-
+ 
 
 #EINFACHES BEISPIEL
 """
@@ -180,4 +177,9 @@ for val in n:
     print "Exacte Lösung"
     print exacteLoesung
     print "--------------------------------------------"
-# Man kann behaupten, dass die Verfahren ......
+
+    # Die Lösungen stimmen ja überein.
+    
+# Man kann behaupten, dass die Pivot-Verfahren  numerischen Fehler reduzieren. Aber jedoch beim Schriftlichen Lösung der Aufgaben ergibt sich mehr Aufwand. 
+#Beim Pivot-Verfahren sucht man  in der  ersten Spalte das betragsmäßig maximale Element, tauscht die Zeilen und richtet danach die Elimination aus.
+
